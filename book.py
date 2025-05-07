@@ -143,6 +143,7 @@ def search():
 
     search_result = Book.query.filter(Book.name.ilike(f"%{query}%")).all()
     return render_template("search_results.html", books=search_result, query=query)
+# SELECT * FROM Book WHERE name LIKE '%query%';
 
 
 @app.route("/featured")
@@ -164,6 +165,7 @@ def featured():
 #     featured_books = Book.query.all()
 #     return render_template('featured.html', books=featured_books)
 # SELECT * FROM Book WHERE name LIKE '%query%';
+
 @app.route("/popular")
 def popular():
     popular_books = Book.query.order_by(Book.total_sells.desc()).limit(3).all()
@@ -174,7 +176,7 @@ def popular():
 def book_detail(book_id):
     book = Book.query.get_or_404(book_id)
     return render_template("book_detail.html", book=book)
-
+# SELECT * FROM Book WHERE id = book_id;
 
 @app.route("/author")
 def author():
