@@ -91,6 +91,41 @@ class Book(db.Model):
     image = db.Column(db.String(300), nullable=False)
     date = db.Column(db.Date, nullable=True)
 
+# ===== CART SYSTEM =====
+class CartItem(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, nullable=False)
+    book_id = db.Column(db.Integer, nullable=False)
+    quantity = db.Column(db.Integer, nullable=False, default=1)
+    date_added = db.Column(db.DateTime, nullable=False, default=datetime.now)
+
+# ===== PAYMENT SYSTEM =====
+class Order(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, nullable=False)
+    order_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    total_amount = db.Column(db.DECIMAL(10, 2), nullable=False)
+    status = db.Column(db.String(50), nullable=False, default='Pending')
+    payment_id = db.Column(db.Integer, nullable=True)
+
+class OrderItem(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    order_id = db.Column(db.Integer, nullable=False)
+    book_id = db.Column(db.Integer, nullable=False) 
+    quantity = db.Column(db.Integer, nullable=False)
+    price = db.Column(db.DECIMAL(10, 2), nullable=False)
+    book_name = db.Column(db.String(1000), nullable=False)
+    book_author = db.Column(db.String(100), nullable=False)
+
+class Payment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    order_id = db.Column(db.Integer, nullable=False)
+    payment_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    payment_method = db.Column(db.String(50), nullable=False)
+    amount = db.Column(db.DECIMAL(10, 2), nullable=False)
+    status = db.Column(db.String(50), nullable=False, default='Completed')
+    transaction_id = db.Column(db.String(100), nullable=True)
+
 
 class Contact(db.Model):
     sno = db.Column(db.Integer, primary_key=True)
