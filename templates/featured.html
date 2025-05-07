@@ -31,6 +31,18 @@ message in messages %}
 
 <section id="featured-books" class="py-5 my-5">
   <div class="container">
+    <div class="row mb-3">
+      <div class="col-md-12">
+          <form method="get" action="{{ url_for('featured') }}" class="filter-form">
+              <label for="sort">Sort by Price:</label>
+              <select name="sort" id="sort" onchange="this.form.submit()">
+                  <option value="">Select</option>
+                  <option value="asc" {{ 'selected' if request.args.get('sort') == 'asc' else '' }}>Low to High</option>
+                  <option value="desc" {{ 'selected' if request.args.get('sort') == 'desc' else '' }}>High to Low</option>
+              </select>
+          </form>
+      </div>
+    </div>
     <div class="row">
       <div class="col-md-12">
         <div class="section-header align-center">
