@@ -170,6 +170,7 @@ def featured():
 def popular():
     popular_books = Book.query.order_by(Book.total_sells.desc()).limit(3).all()
     return render_template("popular.html", popular_books=popular_books)
+# SELECT * FROM Book ORDER BY total_sells DESC LIMIT 3;
 
 
 @app.route("/book/<int:book_id>")
