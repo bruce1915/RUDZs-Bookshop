@@ -49,4 +49,4 @@ Follow these steps to set up the project locally:
 
 ### 1️⃣ Clone the Repository
 ```bash
-
+https://github.com/bruce1915/RUDZs-Bookshop.git
