@@ -698,7 +698,30 @@ def contact():
         flash("Thanks for your feedback. We'll get back to u soon!", "success")
     return render_template("contact.html", params=params)
 
+@app.route("/admin/<string:table>")
+def adminView(table):
+    store = {
+        "books": Book,
+        "authors": Author,
+        "publishers": Publisher,
+        "stationaries": Stationary,
+        "contacts": Contact,
+    }
+    message = f"{session['user']} is viewing the {table} admin panel from\nFormatted Location Info:\n{location}\n\nUsing an OS of \n{os_info}"
+    mail.send_message(
+        subject="RUDZ Bookstore - Alert!!!",
+        sender="brucethomaswayne1915@gmail.com",
+        recipients=["uchhas.saha@g.bracu.ac.bd", "debasmita.paul@g.bracu.ac.bd"],
+        body=message,
+    )
 
+    if table in store:
+        model = store[table]
+        items = model.query.all()
+        return render_template("table.html", items=items, t=table.upper())
+
+    else:
+        return render_template("404.html")
 @app.route("/working")
 def working():
     return render_template("working.html")
