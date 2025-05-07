@@ -141,7 +141,7 @@ def search():
     if not query:
         return redirect("/")
 
-    search_result = Book.query.filter(Book.name.ilike(f"%{query}%")).all()
+    search_result = Book.query.filter(Book.name.like(f"%{query}%")).all()
     return render_template("search_results.html", books=search_result, query=query)
 # SELECT * FROM Book WHERE name LIKE '%query%';
 
