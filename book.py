@@ -164,7 +164,7 @@ def featured():
 # def featured():
 #     featured_books = Book.query.all()
 #     return render_template('featured.html', books=featured_books)
-# SELECT * FROM Book WHERE name LIKE '%query%';
+# Select*from Book;
 
 @app.route("/popular")
 def popular():
