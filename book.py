@@ -544,35 +544,28 @@ def logout():
     return redirect("/")
 
 
-@app.route("/admin/<string:table>/edit/<int:sno>", methods=["GET", "POST"])
+@app.route('/admin/<string:table>/edit/<int:sno>', methods=['GET', 'POST'])
 def edit_item(table, sno):
-    store = {
-        "books": Book,
-        "authors": Author,
-        "publishers": Publisher,
-        "stationaries": Stationary,
-        "contacts": Contact,
-    }
+    store = {"books": Book,"authors": Author,"publishers": Publisher,"stationaries": Stationary,"contacts": Contact}
 
     if table in store:
         model = store[table]
         item = model.query.filter_by(sno=sno).first()
+        if request.method == 'POST':
+            for j in model.__table__.columns:
+                up_value = request.form.get(j.name) #update value
+                if up_value:
+                    setattr(item, j.name, up_value)
 
-        if request.method == "POST":
-
-            for column in model.__table__.columns:
-                field_value = request.form.get(column.name)
-                if field_value:
-                    setattr(item, column.name, field_value)
-
+           
             db.session.commit()
 
-            flash(f"{table.capitalize()} updated successfully!", "success")
-            return redirect(f"/admin/{table}")
+            
+            return redirect(f'/admin/{table}')
 
-        return render_template("edit.html", items=item, t=table.upper(), sno=sno)
+        return render_template('edit.html', items=item, t=table.upper(), sno=sno)
     else:
-        return render_template("404.html")
+        return render_template('404.html')
 
 
 @app.route("/admin/<string:table>/delete/<int:sno>")
