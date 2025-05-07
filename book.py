@@ -157,9 +157,12 @@ def featured():
         featured_books = Book.query.all()
 
     return render_template(
-        "featured.html", books=featured_books, selected_sort=sort_order
-    )
+        "featured.html", books=featured_books, selected_sort=sort_order)
 
+# @app.route('/featured')
+# def featured():
+#     featured_books = Book.query.all()
+#     return render_template('featured.html', books=featured_books)
 
 @app.route("/popular")
 def popular():
