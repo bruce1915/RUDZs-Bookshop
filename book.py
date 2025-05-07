@@ -597,35 +597,27 @@ def delete_item(table, sno):
             return render_template("404.html")
 
 
-@app.route("/admin/<string:table>/add", methods=["GET", "POST"])
+@app.route('/admin/<string:table>/add', methods=['GET', 'POST'])
 def add_item(table):
-    store = {
-        "books": Book,
-        "authors": Author,
-        "publishers": Publisher,
-        "stationaries": Stationary,
-        "contacts": Contact,
-    }
-
+    store = {"books": Book,"authors": Author,"publishers": Publisher,"stationaries": Stationary,"contacts": Contact}
+    #use dictionary 
     if table in store:
         model = store[table]
-
-        new_item = model()
-
-        if request.method == "POST":
-
-            for column in model.__table__.columns:
-                field_value = request.form.get(column.name)
-                if field_value:
-                    setattr(new_item, column.name, field_value)
+        new_item = model() #empty obj
+        if request.method == 'POST':
+            for i in model.__table__.columns:
+                new_value = request.form.get(i.name)
+                if new_value:
+                    setattr(new_item, i.name, new_value)
             db.session.add(new_item)
-            db.session.commit()
-            flash(f"{table.capitalize()} added successfully!", "success")
-            return redirect(f"/admin/{table}")
+            db.session.commit() 
+            
+            return redirect(f'/admin/{table}')  
 
-        return render_template("add.html", item=new_item, t=table.upper())
+        return render_template('add.html', item=new_item, t=table.upper())  
     else:
-        return render_template("404.html")
+        return render_template('404.html')
+
 
 
 @app.route("/offer")
