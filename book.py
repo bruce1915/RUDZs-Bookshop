@@ -152,10 +152,13 @@ def featured():
 
     if sort_order == "asc":
         featured_books = Book.query.order_by(Book.price.asc()).all()
+        #SELECT * FROM book ORDER BY price ASC;
     elif sort_order == "desc":
         featured_books = Book.query.order_by(Book.price.desc()).all()
+        #SELECT * FROM book ORDER BY price DESC;
     else:
         featured_books = Book.query.all()
+        #SELECT * FROM book;
 
     return render_template(
         "featured.html", books=featured_books, selected_sort=sort_order)
@@ -209,10 +212,13 @@ def stationary():
 
     if sort_order == "asc":
         st = Stationary.query.order_by(Stationary.price.asc()).all()
+        #SELECT * FROM stationary ORDER BY price ASC;
     elif sort_order == "desc":
         st = Stationary.query.order_by(Stationary.price.desc()).all()
+        #SELECT * FROM stationary ORDER BY price DESC;
     else:
         st = Stationary.query.all()
+        #SELECT * FROM stationary;
 
     return render_template("stationary.html", st=st, selected_sort=sort_order)
 
@@ -225,14 +231,18 @@ def wishlist():
 
     else:
         user_email = User.query.filter_by(email=session["email"]).first().email
+        #SELECT email FROM user WHERE email = '<session_email>' LIMIT 1;
         wishlist_items = Wishlist.query.filter_by(user_email=user_email).all()
+        #SELECT * FROM wishlist WHERE user_email = '<user_email>';
 
         detailed_items = []
         for item in wishlist_items:
             if item.product_type == "book":
                 product = Book.query.get(item.product_id)
+                #SELECT * FROM book WHERE id = <product_id>;
             else:
                 product = Stationary.query.get(item.product_id)
+                #SELECT * FROM stationary WHERE id = <product_id>;
             detailed_items.append(
                 {"item": product, "type": item.product_type, "wishlist_id": item.id}
             )
@@ -247,10 +257,12 @@ def add_to_wishlist(product_type, product_id):
         return redirect("/login")
     else:
         user_email = User.query.filter_by(email=session["email"]).first().email
+        #SELECT email FROM user WHERE email = '<session_email>' LIMIT 1;
 
         exists = Wishlist.query.filter_by(
             user_email=user_email, product_type=product_type, product_id=product_id
         ).first()
+        #SELECT * FROM wishlist WHERE user_email = '<user_email>' AND product_type = '<product_type>' AND product_id = <product_id> LIMIT 1;
         if exists:
             flash("Already in Wishlist!", "warning")
         else:
@@ -259,6 +271,7 @@ def add_to_wishlist(product_type, product_id):
             )
             db.session.add(wishlist_item)
             db.session.commit()
+            #INSERT INTO wishlist (user_email, product_type, product_id, date_added) VALUES ('<user_email>', '<product_type>', <product_id>, NOW());
             flash("Added to Wishlist!", "success")
 
         return redirect(request.referrer)
@@ -268,7 +281,9 @@ def add_to_wishlist(product_type, product_id):
 def remove_from_wishlist(wishlist_id):
     if "user" in session:
         item = Wishlist.query.get_or_404(wishlist_id)
+        #SELECT * FROM wishlist WHERE id = <wishlist_id> LIMIT 1;
         db.session.delete(item)
+        #DELETE FROM wishlist WHERE id = <wishlist_id>;
         db.session.commit()
         flash("Removed from Wishlist!", "success")
     return redirect("/wishlist")
